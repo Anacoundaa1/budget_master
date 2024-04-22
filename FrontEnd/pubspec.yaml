@@ -17,3 +17,21 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  fonts:
+    - family: ClashDisplaySemiBold
+      fonts:
+        - asset: fonts/ClashDisplay-Semibold.otf
+
+    - family: ClashDisplayRegular
+      fonts:
+        - asset: fonts/ClashDisplay-Regular.otf
+
+    - family: ClashDisplayMedium 
+      fonts:
+        - asset: fonts/ClashDisplay-Medium.otf
+
+    - family: ClashDisplayLight 
+      fonts:
+        - asset: fonts/ClashDisplay-Light.otf
+
+  
