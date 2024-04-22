@@ -1,44 +1,15 @@
-import 'dart:io';
-
-import 'package:args/args.dart';
 import 'package:shelf/shelf.dart' as shelf;
-import 'package:shelf/shelf_io.dart' as io;
-import 'controllers/depenses_controller.dart';
-// Importez le deuxième contrôleur
+import 'package:shelf/shelf_io.dart' as shelf_io;
+import './controllers/depenses_controller.dart';
 
-// For Google Cloud Run, set _hostname to '0.0.0.0'.
-const _hostname = 'localhost';
+void main() async {
+  final app = depensesController();
 
-void main(List<String> args) async {
-  var parser = ArgParser()..addOption('port', abbr: 'p');
-  var result = parser.parse(args);
+  // Configuration du serveur Shelf avec notre application
+  final handler =
+      const shelf.Pipeline().addMiddleware(shelf.logRequests()).addHandler(app);
 
-  // For Google Cloud Run, we respect the PORT environment variable
-  var portStr = result['port'] ?? Platform.environment['PORT'] ?? '8080';
-  var port = int.tryParse(portStr);
-
-  if (port == null) {
-    stdout.writeln('Could not parse port value "$portStr" into a number.');
-    // 64: command line usage error
-    exitCode = 64;
-    return;
-  }
-
-  var handler = const shelf.Pipeline()
-      .addMiddleware(shelf.logRequests())
-      .addHandler((request) {
-    // Choisissez le contrôleur en fonction de la route
-    if (request.url.path == '/depenses') {
-      return handleDepensesRequest(
-          request); // Utilisation de la fonction du contrôleur pour la route /depenses
-    } else {
-      return shelf.Response.notFound('Not Found');
-    }
-  });
-
-  var server = await io.serve(handler, _hostname, port);
-  print('Serving at http://${server.address.host}:${server.port}');
+  // Démarrage du serveur sur le port 8080
+  final server = await shelf_io.serve(handler, 'localhost', 8080);
+  print('Serveur démarré sur le port ${server.port}');
 }
-
-shelf.Response _echoRequest(shelf.Request request) =>
-    shelf.Response.ok('Request for "${request.url}"');

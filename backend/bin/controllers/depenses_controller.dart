@@ -1,34 +1,30 @@
 import 'dart:convert';
-import 'package:shelf/shelf.dart' as shelf;
-import 'package:supabase/supabase.dart';
+import 'package:shelf/shelf.dart';
+import 'package:shelf_router/shelf_router.dart';
 
-Future<shelf.Response> handleDepensesRequest(shelf.Request request) async {
-  if (request.method == 'POST' && request.url.path == '/depenses') {
-    // Parse request body
-    var requestBody = await request.readAsString();
-    var requestData = jsonDecode(requestBody);
+Router depensesController() {
+  final app = Router();
 
-    // Extract string parameter
-    String param = requestData['param'];
+  // Route pour ajouter une dépense
+  app.post('/addExpense', (Request request) async {
+    // Lecture des données JSON du corps de la requête
+    final requestBody = await request.readAsString();
+    final Map<String, dynamic> jsonData = json.decode(requestBody);
 
-    // Connect to Supabase
-    var supabase = SupabaseClient('your_supabase_url', 'your_supabase_key');
+    // Extraction des paramètres de la requête
+    final String expenseName = jsonData['name'];
+    final String expenseCategory = jsonData['category'];
+    final String expenseAmount = jsonData['amount'];
 
-    // Example: Insert data into Supabase table
-    var response = await supabase
-        .from('your_table_name')
-        .insert({'your_column_name': param});
+    // Exemple de traitement : enregistrement de la dépense dans une base de données ou un fichier
+    // Pour l'instant, affichons simplement les données reçues
+    print('Nouvelle dépense ajoutée :');
+    print(
+        'Nom: $expenseName, Catégorie: $expenseCategory, Montant: $expenseAmount');
 
-    if (response.error != null) {
-      // If there's an error with the Supabase request
-      return shelf.Response.internalServerError(
-          body: jsonEncode({'error': response.error?.message}));
-    } else {
-      // If the Supabase request is successful
-      return shelf.Response.ok('Saved: $param');
-    }
-  } else {
-    // For other requests, respond with a 404 Not Found
-    return shelf.Response.notFound('Not Found');
-  }
+    // Réponse de succès
+    return Response.ok('Dépense ajoutée avec succès');
+  });
+
+  return app;
 }
