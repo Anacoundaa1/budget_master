@@ -24,7 +24,14 @@ Router depensesController() {
         'date': dateString,
       }).select();
 
-      return Response.ok('Dépense ajoutée avec succès');
+      // Ajouter les en-têtes CORS à la réponse
+      final headers = {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Origin, Content-Type',
+        'Access-Control-Max-Age': '86400',
+      };
+      return Response.ok('Dépense ajoutée avec succès', headers: headers);
     } catch (error) {
       // Erreur inattendue
       return Response.internalServerError(
@@ -40,8 +47,14 @@ Router depensesController() {
 
       final List<dynamic> depenses = response;
 
-      print(response);
-      return Response.ok(json.encode(depenses));
+      // Ajouter les en-têtes CORS à la réponse
+      final headers = {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Origin, Content-Type',
+        'Access-Control-Max-Age': '86400',
+      };
+      return Response.ok(json.encode(depenses), headers: headers);
     } catch (error) {
       // Erreur inattendue
       return Response.internalServerError(
@@ -61,8 +74,14 @@ Router depensesController() {
 
       final List<dynamic> depenses = response;
 
-      print(response);
-      return Response.ok(json.encode(depenses));
+      // Ajouter les en-têtes CORS à la réponse
+      final headers = {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Origin, Content-Type',
+        'Access-Control-Max-Age': '86400',
+      };
+      return Response.ok(json.encode(depenses), headers: headers);
     } catch (error) {
       // Erreur inattendue
       return Response.internalServerError(
@@ -98,7 +117,14 @@ Router depensesController() {
         total += montant;
       }
 
-      return Response.ok(json.encode({'total': total}));
+      // Ajouter les en-têtes CORS à la réponse
+      final headers = {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Origin, Content-Type',
+        'Access-Control-Max-Age': '86400',
+      };
+      return Response.ok(json.encode({'total': total}), headers: headers);
     } catch (error) {
       // Erreur inattendue
       return Response.internalServerError(
